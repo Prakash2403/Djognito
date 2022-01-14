@@ -3,9 +3,17 @@ name = "Djognito"
 version = "0.1.0"
 description = "Auth module for using AWS Cognito with DRF"
 authors = ["Prakash2403 <rishurai24@gmail.com>"]
+keywords = ["AWS Cognito", "Cognito", "DRF", "Authentication", "Authorization"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/Prakash2403/Djognito"
+repository = "https://github.com/Prakash2403/Djognito"
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">3.6"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 Django = "<=3"
 djangorestframework = "^3.13.1"
