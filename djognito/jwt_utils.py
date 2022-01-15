@@ -33,7 +33,7 @@ def get_keys():
 
 
 def verify_jwt(token):
-    app_client_id = os.environ.get('APP_CLIENT_ID')
+    app_client_id = os.environ.get('AWS_COGNITO_APP_CLIENT_ID')
     keys = get_keys()
     # get the kid from the headers prior to verification
     headers = jwt.get_unverified_headers(token)

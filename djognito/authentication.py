@@ -14,13 +14,14 @@ class BaseCognitoAuthentication(authentication.BaseAuthentication):
         pass
 
     def authenticate(self, request):
-        access_token_id = os.environ.get('ACCESS_TOKEN_KEY_NAME', None)
-        logger.debug(f'Using {access_token_id} as access token key name.')
-        if access_token_id is None:
+        access_token_key_name = os.environ.get('ACCESS_TOKEN_KEY', None)
+        logger.debug(
+            f'Using {access_token_key_name} as access token key name.')
+        if access_token_key_name is None:
             logger.warning(
-                'No Access Token Key specified. Kindly set ACCESS_TOKEN_KEY_NAME environment variable.')
+                'No Access Token Key specified. Kindly set ACCESS_TOKEN_KEY environment variable.')
         try:
-            access_token = request.COOKIES.get('accessToken', '')
+            access_token = request.COOKIES.get(access_token_key_name, '')
             claims = verify_jwt(access_token)
             if claims:
                 username = claims['username']
