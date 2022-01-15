@@ -15,7 +15,7 @@ Every solution I came across does a lookup on `User` model in database, thus def
 
 I have engineered the frontend to send relevant tokens using `cookies`. I just wanted to
 
-*  Verify the  `JWT` stored in `accessToken` cookie.
+*  Verify the  `JWT` stored in `${ACCESS_TOKEN_KEY}` cookie.
 *  Attach a `user` object to my `request` if verification succeeds.
 *  Avoid any DB lookups.
 *  Attach permissions to user depending on some of the JWT fields(`cognito:groups` in my case).
@@ -30,7 +30,7 @@ a `user` object is created and attached to `request` object. Rest of the code ca
 
 ## A detailed view
 
-The authentication module picks up the JWT stored in cookie named `accessToken`, verifies it, and creates a user if the verification succeeds. It only uses `username` to instantiate the `user` object. 
+The authentication module picks up the JWT stored in cookie named `${ACCESS_TOKEN_KEY}`, verifies it, and creates a user if the verification succeeds. It only uses `username` to instantiate the `user` object. 
 
 **Note:** It is expected that `username` is present in your `JWT` as a claim. If you're using AWS Cognito, then your JWT will contain a `username` attribute.
 
@@ -51,11 +51,20 @@ Note that this module is designed to avoid DB lookups at all.
 Kindly ensure that following environment variables are set:
 
 ```
+ACCESS_TOKEN_KEY= #  Points to the cookie key containing access token issued by AWS Cognito
+AWS_COGNITO_APP_CLIENT_ID= # Your Cognito App client ID
+AWS_COGNITO_REGION= # Region in which your Cognito Server exists
+AWS_COGNITO_USER_POOL_ID= # Your Cognito User pool ID 
 ```
 
-### Case 1: You only want to verify JWT
+### Case 1: You only want to authenticate using JWT
 
-### Case 2: You want to verify JWT and attach attributes/permissions
+Ensure that environment variables described in [common](#common) sections are set
+
+### Case 2: You want to authenticate using JWT and attach attributes/permissions
+
+Ensure that environment variables described in [common](#common) sections are set
+
 
 ## Appendix
 
@@ -72,4 +81,4 @@ One of the primary usecase of JWT is stateless authentication. It allows you to 
 
 #### AWS Cognito
 
-AWS Cognito can act as a `AuthServer` for systems relying on Stateless Authentication. It uses `JWT` standard for issuing tokens and takes care of user management (sign-up, sign-in, account verification, MFA, etc). You can read more about AWS Cognito [here](https://aws.amazon.com/cognito/)  
+AWS Cognito can act as a `AuthServer` for systems relying on Stateless Authentication. It uses `JWT` standard for issuing tokens and takes care of user management (sign-up, sign-in, account verification, MFA, etc). You can read more about AWS Cognito [here](https://aws.amazon.com/cognito/)
