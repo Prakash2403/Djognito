@@ -2,6 +2,21 @@
 
 A DRF Authentication module for verifying JWT Token issued by AWS Cognito.
 
+- [Djognito](#djognito)
+  - [Problem Statement](#problem-statement)
+  - [My usecase](#my-usecase)
+  - [Solution̦̦](#solution̦̦)
+    - [TL;DR version](#tldr-version)
+  - [A detailed view](#a-detailed-view)
+  - [How to use this module](#how-to-use-this-module)
+    - [Common](#common)
+    - [Case 1: You only want to authenticate using JWT](#case-1-you-only-want-to-authenticate-using-jwt)
+    - [Case 2: You want to authenticate using JWT and attach attributes/permissions](#case-2-you-want-to-authenticate-using-jwt-and-attach-attributespermissions)
+  - [Appendix](#appendix)
+    - [Pre-requisites](#pre-requisites)
+      - [JWT](#jwt)
+      - [AWS Cognito](#aws-cognito)
+
 ## Problem Statement
 
 I wasn't able to find a DRF Authentication Module which simply allows you to 
