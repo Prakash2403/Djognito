@@ -21,7 +21,7 @@ I have engineered the frontend to send relevant tokens using `cookies`. I just w
 *  Attach permissions to user depending on some of the JWT fields(`cognito:groups` in my case).
 
 
-## Solution
+## Solution̦̦
 
 ### TL;DR version
 
@@ -61,10 +61,63 @@ AWS_COGNITO_USER_POOL_ID= # Your Cognito User pool ID
 
 Ensure that environment variables described in [common](#common) sections are set
 
+Add  `djognito.authentication.BaseCognitoAuthentication` to `DEFAULT_AUTHENTICATION_CLASSES` in `settings.py`. Finally, your `REST_FRAMEWORK` dict should look like
+
+```
+REST_FRAMEWORK = {
+    ....
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        "djognito.authentication.BaseCognitoAuthentication",
+        ....
+    ),
+    ....
+}
+```
+
 ### Case 2: You want to authenticate using JWT and attach attributes/permissions
 
 Ensure that environment variables described in [common](#common) sections are set
 
+1. Create a class inheriting `BaseCognitoAuthentication` and override the `attach_attributes` method.
+2. Add that class in your `DEFAULT_AUTHENTICATION_CLASSES` list.
+
+The following example attaches an attribute called `groups` to user object. The downstream code can use `request.user.groups` anywhere to access the groups to which user belongs.
+
+This example assumes that every user is part of at least one AWS Cognito group.
+
+```python
+from djognito.authentication import BaseCognitoAuthentication
+from djognito.jwt_utils import verify_jwt
+from rest_framework import authentication
+from rest_framework import exceptions
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class CognitoAuthentication(BaseCognitoAuthentication):
+    def attach_attributes(self, user, request):
+        access_token = request.COOKIES.get('accessToken', '')
+        claims = verify_jwt(access_token)
+        user.groups = claims['cognito:groups']
+        if len(claims['cognito:groups']) > 1:
+            logger.warning(
+                f'User {claims["username"]} belongs to multiple group: {claims["cognito: groups"]}.')
+```
+
+Assuming that the filename is `authentication.py` and `PYTHONPATH` is able to locate it, add `authentication.CognitoAuthentication` to your `DEFAULT_AUTHENTICATION_CLASSES`. Finally, your `REST_FRAMEWORK` dict should look like
+```
+REST_FRAMEWORK = {
+    ....
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        "authentication.CognitoAuthentication",
+        ....
+    ),
+    ....
+}
+```
+
+You can read more about the flow of control [here](#a-detailed-view)
 
 ## Appendix
 
