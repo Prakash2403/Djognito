@@ -22,7 +22,7 @@ A DRF Authentication module for verifying JWT Token issued by AWS Cognito.
 I wasn't able to find a DRF Authentication Module which simply allows you to 
   * Verify a JWT
   * Attach a `user` object to request if verification is successful
-    * **Assumption**: `user` object only requires `username` attribute to be instantiated. Other attributes can be later added using `attach_attribute` hook provided.
+    * **Assumption**: `user` object only requires `username` attribute to be instantiated. Other attributes can be later added using `attach_attributes` hook provided.
 
 Every solution I came across does a lookup on `User` model in database, thus defeating the _statelessness_ of JWT.
 
@@ -50,7 +50,7 @@ The authentication module picks up the JWT stored in cookie named `${ACCESS_TOKE
 **Note:** It is expected that `username` is present in your `JWT` as a claim. If you're using AWS Cognito, then your JWT will contain a `username` attribute.
 
 The following assignment operation happens
-```
+```python
 from django.contrib.auth.models import User
 user = User(username=username) # Username is created using username claim present in your JWT
 ```
@@ -65,7 +65,7 @@ Note that this module is designed to avoid DB lookups at all.
 
 Kindly ensure that following environment variables are set:
 
-```
+```python
 ACCESS_TOKEN_KEY= #  Points to the cookie key containing access token issued by AWS Cognito
 AWS_COGNITO_APP_CLIENT_ID= # Your Cognito App client ID
 AWS_COGNITO_REGION= # Region in which your Cognito Server exists
@@ -78,7 +78,7 @@ Ensure that environment variables described in [common](#common) sections are se
 
 Add  `djognito.authentication.BaseCognitoAuthentication` to `DEFAULT_AUTHENTICATION_CLASSES` in `settings.py`. Finally, your `REST_FRAMEWORK` dict should look like
 
-```
+```python
 REST_FRAMEWORK = {
     ....
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -121,7 +121,7 @@ class CognitoAuthentication(BaseCognitoAuthentication):
 ```
 
 Assuming that the filename is `authentication.py` and `PYTHONPATH` is able to locate it, add `authentication.CognitoAuthentication` to your `DEFAULT_AUTHENTICATION_CLASSES`. Finally, your `REST_FRAMEWORK` dict should look like
-```
+```python
 REST_FRAMEWORK = {
     ....
     'DEFAULT_AUTHENTICATION_CLASSES': (
