@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Djognito"
-version = "0.1.0"
+version = "0.1.1"
 description = "Auth module for using AWS Cognito with DRF"
 authors = ["Prakash2403 <rishurai24@gmail.com>"]
 keywords = ["AWS Cognito", "Cognito", "DRF", "Authentication", "Authorization"]
@@ -15,7 +15,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">3.6"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-Django = "<=3"
+Django = ">=3"
 djangorestframework = "^3.13.1"
 
 [tool.poetry.dev-dependencies]
