@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Djognito"
-version = "0.1.1"
+version = "0.1.2"
 description = "Auth module for using AWS Cognito with DRF"
 authors = ["Prakash2403 <rishurai24@gmail.com>"]
 keywords = ["AWS Cognito", "Cognito", "DRF", "Authentication", "Authorization"]
